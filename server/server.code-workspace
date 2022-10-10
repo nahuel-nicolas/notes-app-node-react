@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../mern-beginners"
+		},
+		{
+			"path": "../../../django/notes_app"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {}
+}
