@@ -15,11 +15,9 @@ const server = http.createServer(function(req, resp) {
     if (req.url == '/notes/' || req.url == '/notes') {
         console.log('notes endpoint')
         resp.writeHead(200, 'OK', {'Content-Type': 'application/json'})
-        const current_res = http.get('http://127.0.0.1:8000/notes/', res => {
+        const current_res = http.get('http://127.0.0.1:3001/notes/', res => {
             let data = [];
-            const headerDate = res.headers && res.headers.date ? res.headers.date : 'no response date';
             console.log('Status Code:', res.statusCode);
-            console.log('Date in Response header:', headerDate);
 
             res.on('data', chunk => {
                 data.push(chunk);
@@ -36,7 +34,8 @@ const server = http.createServer(function(req, resp) {
         }).on('error', err => {
             console.log('Error: ', err.message);
         });
-        console.log([current_res.body, current_res.data, Object.keys(current_res), 'nbx', current_res.res])
+        console.log([current_res.body, current_res.data, Object.keys(current_res), 'nbx', current_res.res]);
+        current_res.end();
     } else {
         resp.writeHead(200, 'OK', {'Content-Type': 'text/plain'})
         resp.write("Hi world")
