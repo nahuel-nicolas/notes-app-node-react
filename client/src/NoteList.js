@@ -9,7 +9,6 @@ const NoteList = () => {
     useEffect(() => {
         utilities.fetch_and_set(notes_api_url, setNoteListData)
     }, [])
-    console.log(noteListData)
     let valueToReturn;
     if (noteListData == null) {
         valueToReturn = <h2>Loading...</h2>
