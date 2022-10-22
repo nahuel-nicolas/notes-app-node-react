@@ -1,5 +1,4 @@
-import { useState, useEffect, createContext } from "react"
-import * as utilities from './utilities'
+import { useState, useEffect } from "react"
 import { useParams, useNavigate } from 'react-router-dom'
 import Box from "./Box/Box"
 import { notes_api_url } from './settings'
@@ -16,12 +15,17 @@ const Note = () => {
     const [isNewNote, setIsNewNote] = useState(true)
     const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(true)
     const [isSavingChangesBoxVisible, setIsSavingChangesBoxVisible] = useState(false)
-    const currentNote_api_url = notes_api_url + note_id + "/"
+    const current_note_api_url = notes_api_url + note_id + "/"
 
     useEffect(() => {
         if (note_id != 'new') {
-            setIsNewNote(false)
-            utilities.fetch_and_set(currentNote_api_url, [setNoteData, setInitialNoteBody])
+            setIsNewNote(false);
+            fetch(current_note_api_url)
+            .then(res => res.json())
+            .then(note_data => {
+                setNoteData(note_data);
+                setInitialNoteBody(note_data.body);
+            });
         }
     }, [])
     useEffect(() => {
@@ -51,7 +55,7 @@ const Note = () => {
     }
 
     async function updateNote() {
-        await fetch(currentNote_api_url, {
+        await fetch(current_note_api_url, {
             method: "PUT",
             headers: {
                 'Accept': 'application/json, text/plain, */*',
@@ -62,7 +66,7 @@ const Note = () => {
     }
 
     async function deleteNote() {
-        await fetch(currentNote_api_url, {
+        await fetch(current_note_api_url, {
             method: "DELETE",
             headers: {
                 'Accept': 'application/json, text/plain, */*',

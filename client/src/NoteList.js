@@ -7,7 +7,11 @@ import { notes_api_url } from './settings'
 const NoteList = () => {
     const [noteListData, setNoteListData] = useState(null)
     useEffect(() => {
-        utilities.fetch_and_set(notes_api_url, setNoteListData)
+        fetch(notes_api_url)
+        .then(res => res.json())
+        .then(data => {
+            setNoteListData(data)
+        })
     }, [])
     let valueToReturn;
     if (noteListData == null) {
