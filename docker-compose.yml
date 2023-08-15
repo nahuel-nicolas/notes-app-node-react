@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:4.2.21-bionic
+    restart: unless-stopped
+    network_mode: "host"
+    volumes:
+      - ./mongodata:/data/db
+
+  node:
+    image: node:12.22.12-alpine3.15
+    network_mode: "host"
+    restart: unless-stopped
+    volumes:
+      - ./server:/server
+    command: >
+      sh -c "cd /server &&
+            echo '>>> INSTALLING NODE MODULES <<<' &&
+            echo '' &&
+            npm i &&
+            echo '' &&
+            echo '>>> STARTING SERVICE <<<' &&
+            echo '' &&
+            npm start"
+    depends_on:
+      - mongo
+
+  react:
+    image: node:12.22.12-alpine3.15
+    network_mode: "host"
+    restart: unless-stopped
+    volumes:
+      - ./client:/client
+    command: >
+      sh -c "cd /client &&
+            echo '>>> INSTALLING NODE MODULES <<<' &&
+            echo '' &&
+            npm i &&
+            echo '' &&
+            echo '>>> STARTING SERVICE <<<' &&
+            echo '' &&
+            npm start"
+    depends_on:
+      - node
